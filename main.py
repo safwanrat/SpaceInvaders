@@ -1,6 +1,7 @@
 '''
 119 Safwan Rahman
 Space Invaders Game
+Extra element - spaceship shields
 '''
 
 import pygame
