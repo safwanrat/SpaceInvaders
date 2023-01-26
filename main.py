@@ -1,3 +1,8 @@
+'''
+119 Safwan Rahman
+Space Invaders Game
+'''
+
 import pygame
 from pygame import mixer
 from pygame.locals import *
@@ -46,26 +51,23 @@ countdown = 3
 finalCount = pygame.time.get_ticks()
 gameOver = 0  # 0 is no game over, 1 means player has won, -1 means player has lost
 
-# define colours
+# color variables
 red = (255, 0, 0)
 green = (0, 255, 0)
 white = (255, 255, 255)
 
-
-
-# load image
+# loading image
 bg = pygame.image.load("img/bg.png")
 
 def draw_bg():
     screen.blit(bg, (0, 0))
 
-
-# define function for creating text
+# text creation
 def draw_text(text, font, text_col, x, y):
     img = font.render(text, True, text_col)
     screen.blit(img, (x, y))
 
-# create spaceship class
+# spaceship class
 class Spaceship(pygame.sprite.Sprite):
     def __init__(self, x, y, health):
         pygame.sprite.Sprite.__init__(self)
@@ -85,28 +87,26 @@ class Spaceship(pygame.sprite.Sprite):
         gameOver = 0
 
 
-        # get key press
+        # get keys pressed
         key = pygame.key.get_pressed()
         if key[pygame.K_LEFT] and self.rect.left > 0:
             self.rect.x -= speed
         if key[pygame.K_RIGHT] and self.rect.right < screenWidth:
             self.rect.x += speed
 
-        # record current time
+        # current time
         timeNow = pygame.time.get_ticks()
-        # shoot
+        # shooting bullet
         if key[pygame.K_SPACE] and timeNow - self.lastShot > cooldown:
             laser.play()
             bullet = Bullets(self.rect.centerx, self.rect.top)
             bulletGroup.add(bullet)
             self.lastShot = timeNow
 
-
-        # update mask
+        # mask
         self.mask = pygame.mask.from_surface(self.image)
 
-
-        # draw health bar
+        # health bar
         pygame.draw.rect(screen, red, (self.rect.x, (self.rect.bottom + 10), self.rect.width, 15))
         if self.remainingHealth > 0:
             pygame.draw.rect(screen, green, (self.rect.x, (self.rect.bottom + 10), int(self.rect.width * (self.remainingHealth / self.startingHealth)), 15))
@@ -117,9 +117,9 @@ class Spaceship(pygame.sprite.Sprite):
             gameOver = -1
         return gameOver
 
-
-
-# create Bullets class
+    
+    
+# bullets
 class Bullets(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
@@ -138,7 +138,7 @@ class Bullets(pygame.sprite.Sprite):
             explosionGroup.add(explosion)
 
 
-
+# shield
 class Shield(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
@@ -161,7 +161,7 @@ class Shield(pygame.sprite.Sprite):
         if self.health <= 0:
             self.kill()
 
-# create Aliens class
+# alien
 class Aliens(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
@@ -178,8 +178,9 @@ class Aliens(pygame.sprite.Sprite):
             self.move_direction *= -1
             self.move_counter *= self.move_direction
 
+            
 
-# create Alien Bullets class
+# alien's bullets
 class Alien_Bullets(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
@@ -237,7 +238,7 @@ class Explosion(pygame.sprite.Sprite):
             self.kill()
 
 
-# create sprite groups
+# sprite groups
 spaceshipGroup = pygame.sprite.Group()
 bulletGroup = pygame.sprite.Group()
 alienGroup = pygame.sprite.Group()
@@ -260,7 +261,7 @@ def create_aliens():
 create_aliens()
 create_shields()
 
-# create player
+# player creation
 spaceship = Spaceship(int(screenWidth / 2), screenHeight - 100, 3)
 spaceshipGroup.add(spaceship)
 
@@ -268,7 +269,7 @@ run = True
 while run:
     clock.tick(fps)
 
-    # draw background
+    # background
     draw_bg()
 
 
@@ -283,7 +284,7 @@ while run:
             alienBulletGroup.add(alien_bullet)
             finalAlienShot = timeNow
 
-        # check if all the aliens have been killed
+        # if all aliens are dead
         if len(alienGroup) == 0:
             gameOver = 1
 
@@ -310,7 +311,7 @@ while run:
             finalCount = count_timer
 
 
-    # update explosion group    
+    # update explosion groups    
     explosionGroup.update()
     shieldGroup.update()
 
